@@ -3,7 +3,7 @@ import React from 'react';
 import { render } from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
 import App from './containers/App';
-import { BrowserRouter, Route } from 'react-router-dom';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import Admin from './components/Admin';
 import Genre from './components/Genre';
 import Home from './components/Home';
@@ -14,10 +14,12 @@ const renderApp = (App) => {
         <AppContainer>
             <BrowserRouter>
                 <App>
-                    <Route exact path='/' component={Home} />
-                    <Route path='/admin' component={Admin} />
-                    <Route path='/genre' component={Genre} />
-                    <Route component={NotFound} />
+                    <Switch>
+                        <Route exact path='/' component={Home} />
+                        <Route path='/admin' component={Admin} />
+                        <Route path='/genre' component={Genre} />
+                        <Route component={NotFound} />
+                    </Switch>
                 </App>
             </BrowserRouter>
         </AppContainer>,
