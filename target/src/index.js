@@ -1,27 +1,25 @@
 import 'babel-polyfill';
 import React from 'react';
 import { render } from 'react-dom';
+import { Provider } from 'react-redux';
+import { BrowserRouter } from 'react-router-dom';
 import { AppContainer } from 'react-hot-loader';
+import { routes } from './routes';
 import App from './containers/App';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import Admin from './components/Admin';
-import Genre from './components/Genre';
-import Home from './components/Home';
-import NotFound from './components/NotFound';
+import configureStore from './store/configureStore';
+
+const store = configureStore();
 
 const renderApp = (App) => {
     render(
         <AppContainer>
-            <BrowserRouter>
-                <App>
-                    <Switch>
-                        <Route exact path='/' component={Home} />
-                        <Route path='/admin' component={Admin} />
-                        <Route path='/genre' component={Genre} />
-                        <Route component={NotFound} />
-                    </Switch>
-                </App>
-            </BrowserRouter>
+            <Provider store={store}>
+                <BrowserRouter>
+                    <App>
+                        {routes}
+                    </App>
+                </BrowserRouter>
+            </Provider>
         </AppContainer>,
         document.getElementById('root')
     );
