@@ -1,141 +1,17 @@
-const express = require("express");
-const bodyParser = require("body-parser");
-const fs = require("fs");
+const mongoClient = require("mongodb").MongoClient;
 
-const app = express();
-const jsonParser = bodyParser.json();
+const url = "mongodb://localhost:27017/";
 
-app.use(express.static(__dirname + "/public"));
+mongoClient.connect(url, function(err, client){
+    const db = client.db("usersdb");
+    const collection = db.collection("users");
 
-// получение списка данных
-app.get("/api/users", function(req, res){
-    const content = fs.readFileSync("users.json", "utf8");
-    const users = JSON.parse(content);
+    const user = {name: "Tom", age: 23};
 
-    res.send(users);
-});
+    collection.insertOne(user, function(err, result){
+        if(err) return console.log(err);
 
-// получение одного пользователя по id
-app.get("/api/users/:id", function(req, res){
-    const id = req.params.id; // получаем id
-    const content = fs.readFileSync("users.json", "utf8");
-    const users = JSON.parse(content);
-
-    let user = null;
-
-    // находим в массиве пользователя по id
-    for(let i = 0; i < users.length; i++){
-        if(users[i].id == id){
-            user = users[i];
-            break;
-        }
-    }
-    // отправляем пользователя
-    if(user) {
-        res.send(user);
-    } else {
-        res.status(404).send();
-    }
-});
-
-// получение отправленных данных
-app.post("/api/users", jsonParser, function (req, res) {
-    if(!req.body) return res.sendStatus(400);
-
-    const userName = req.body.name;
-    const userAge = req.body.age;
-    const user = {
-        name: userName,
-        age: userAge
-    };
-
-    let data = fs.readFileSync("users.json", "utf8");
-
-    const users = JSON.parse(data);
-
-    // находим максимальный id
-    const id = Math.max.apply(Math, users.map(u => u.id));
-
-
-    // увеличиваем его на единицу
-    user.id = id + 1;
-
-    // добавляем пользователя в массив
-    users.push(user);
-
-    data = JSON.stringify(users);
-
-    // перезаписываем файл с новыми данными
-    fs.writeFileSync("users.json", data);
-
-    res.send(user);
-});
-
-// удаление пользователя по id
-app.delete("/api/users/:id", function(req, res){
-    const id = req.params.id;
-    const data = fs.readFileSync("users.json", "utf8");
-
-    let index = -1;
-
-    const users = JSON.parse(data);
-
-    // находим индекс пользователя в массиве
-    for(let i = 0; i < users.length; i++){
-        if(users[i].id == id){
-            index = i;
-            break;
-        }
-    }
-
-    if(index > -1){
-        // удаляем пользователя из массива по индексу
-        const user = users.splice(index, 1)[0];
-        const data = JSON.stringify(users);
-
-        fs.writeFileSync("users.json", data);
-
-        // отправляем удаленного пользователя
-        res.send(user);
-    } else{
-        res.status(404).send();
-    }
-});
-
-// изменение пользователя
-app.put("/api/users", jsonParser, function(req, res){
-    if(!req.body) return res.sendStatus(400);
-
-    const userId = req.body.id;
-    const userName = req.body.name;
-    const userAge = req.body.age;
-
-    const data = fs.readFileSync("users.json", "utf8");
-    const users = JSON.parse(data);
-
-    let user = null;
-
-    for(let i = 0; i < users.length; i++){
-        if(users[i].id == userId){
-            user = users[i];
-            break;
-        }
-    }
-
-    // изменяем данные у пользователя
-    if(user) {
-        user.age = userAge;
-        user.name = userName;
-
-        const data = JSON.stringify(users);
-
-        fs.writeFileSync("users.json", data);
-        res.send(user);
-    } else {
-        res.status(404).send(user);
-    }
-});
-
-app.listen(3000, function(){
-    console.log("Сервер ожидает подключения...");
+        console.log(result.ops);
+        client.close();
+    });
 });
