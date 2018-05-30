@@ -6,24 +6,25 @@ import {
     GET_PHOTOS_SUCCESS
 } from '../constants/Page';
 
-
 function makeYearPhotos(photos, selectedYear) {
-    let createdYear, yearPhotos = [];
+    let yearPhotos = [];
 
     photos.forEach((item) => {
-        createdYear = new Date(item.created_time).getFullYear();
+        item.photos && item.photos.data.forEach((photo) => {
+            let createdYear = new Date(photo.created_time).getFullYear();
 
-        if (createdYear === selectedYear ) {
-            yearPhotos.push(item)
-        }
+            if (createdYear === selectedYear ) {
+                yearPhotos.push(photo)
+            }
+        });
     });
 
-    return yearPhotos.sort((a, b) => (b.likes && a.likes) ? b.likes.data.length - a.likes.data.length : -1);
+    return yearPhotos;
 }
 
 function loadPhotos(year, dispatch) {
     FB.api(
-        '/me/photos?fields=created_time,likes,images&limit=50',
+        '/me?fields=albums{photos.limit(777){id,images,created_time}}&limit=777',
         function (response) {
             if (response) {
                 if (response.error) {
@@ -36,7 +37,7 @@ function loadPhotos(year, dispatch) {
 
                 dispatch({
                     type: GET_PHOTOS_SUCCESS,
-                    payload: makeYearPhotos(response.data, year)
+                    payload: makeYearPhotos(response.albums.data, year)
                 });
             }
         }
