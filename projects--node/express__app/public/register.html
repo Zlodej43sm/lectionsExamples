@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Регистрация</title>
+    <meta charset="utf-8" />
+</head>
+<body>
+    <h1>Введите данные</h1>
+
+    <form action="/user" method="post">
+        <p>
+            <input type="text" name="userName" placeholder="Имя" />
+        </p>
+
+        <p>
+            <input type="number" name="userAge" placeholder="Возраст" />
+        </p>
+
+        <p>
+            <button type="submit">Отправить</button>
+        </p>
+    </form>
+
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+    <script>
+        $("form").submit(function(e) {
+            e.preventDefault();
+
+            const $form = $(this);
+            const userName = this.elements["userName"].value;
+            const userAge = this.elements["userAge"].value;
+
+            $.ajax({
+                type: $form.attr('method'),
+                url: $form.attr('action'),
+                data: JSON.stringify({
+                    userName: userName,
+                    userAge: userAge
+                }),
+                dataType: "json",
+                contentType: "application/json",
+                success: function(data){
+                    console.log(data);
+                }
+            });
+        });
+    </script>
+</body>
+<html>

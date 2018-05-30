@@ -1,21 +1,23 @@
-// подключение express
 const express = require("express");
+const hbs = require("hbs");
 
-// создаем объект приложения
 const app = express();
 
-// определяем обработчик для маршрута "/"
+app.set("view engine", "hbs");
+
+hbs.registerPartials(__dirname + "/views/partials");
+
+app.set("view engine", "hbs");
+
 app.get("/", function(request, response){
-    response.send("<h1>Главная страница</h1>");
+    response.render("home.hbs");
 });
-
-app.get("/about", function(request, response){
-    response.send("<h1>О сайте</h1>");
-});
-
 app.get("/contact", function(request, response){
-    response.send("<h1>Контакты</h1>");
+    response.render("contact.hbs", {
+        title: "Мои контакты",
+        email: "gavgav@mycorp.com",
+        phone: "+1234567890"
+    });
 });
 
-// начинаем прослушивать подключения на 3000 порту
 app.listen(3000);

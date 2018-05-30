@@ -9,6 +9,8 @@
   "author": "Alec Povolotskiy",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.16.3"
+    "body-parser": "^1.18.3",
+    "express": "^4.16.3",
+    "hbs": "^4.0.1"
   }
 }
