@@ -22,7 +22,7 @@ export default class Page extends Component {
                     <p>Загрузка...</p> :
                     photos.map((entry, index) =>
                         <div key={index}>
-                            <p><img src={entry.images[3].source} /></p>
+                            <p><img src={entry.images[0].source} /></p>
                             <p>{entry.likes ? entry.likes.data.length : 0} ❤</p>
                         </div>
                     )
