@@ -99,7 +99,7 @@ app.delete("/api/users/:id", function(req, res){
     });
 });
 
-app.put("/api/users", jsonParser, function(req, res){
+app.put("/api/users", jsonParser, function(req, res){debugger;
     if(!req.body) return res.sendStatus(400);
 
     const id = new ObjectId(req.body.id);
