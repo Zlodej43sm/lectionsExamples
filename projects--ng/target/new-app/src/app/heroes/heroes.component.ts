@@ -1,7 +1,6 @@
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { Hero } from '../hero';
 import { HeroService } from '../hero.service';
-import { Observable, of } from 'rxjs';
 
 @Component({
   selector: 'app-heroes',
@@ -9,7 +8,7 @@ import { Observable, of } from 'rxjs';
   styleUrls: ['./heroes.component.css']
 })
 export class HeroesComponent implements OnInit {
-  heroes: Observable<Hero[]> ;
+  heroes: Hero[] ;
 
   selectedHero: Hero;
 
