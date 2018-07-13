@@ -10,7 +10,10 @@ app.use(express.static(__dirname + "/public"));
 // Add headers
 app.use(function (req, res, next) {
     // Website you wish to allow to connect
+    // res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
     // Request methods you wish to allow
     // res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
@@ -102,7 +105,7 @@ app.delete("/api/users/:id", function(req, res){
 app.put("/api/users", jsonParser, function(req, res){debugger;
     if(!req.body) return res.sendStatus(400);
 
-    const id = new ObjectId(req.body.id);
+    const id = new ObjectId(req.body._id);
     const userName = req.body.name;
     const userAge = req.body.age;
 
